@@ -1,0 +1,58 @@
+"""
+1. From a table comprised of the following schema, retrieve the total
+number of rows, and aggregate low, average, and high "total" values:
+
+orders
+------
+id INTEGER
+restaurant_id INTEGER
+	total DOUBLE
+	ordered_at_local TIMESTAMP -- local timezone of order
+	ordered_at TIMESTAMP -- GMT   
+"""
+
+SELECT count(*), MIN(total), AVG(total), MAX(total)
+FROM orders
+
+
+"""
+2. From the following 3 table schemas, retrieve the sum of totals for orders 
+placed so far today for all restaurants associated with company ID 1 
+(assuming they are all in the same time zone, and the local time zone is the
+same as the database time zone).
+
+company
+-------
+id INTEGER
+name TEXT
+          
+restaurant
+----------
+id INTEGER
+company_id INTEGER
+name TEXT
+
+orders
+------
+id INTEGER
+restaurant_id INTEGER
+total DOUBLE
+ordered_at_local TIMESTAMP --  time in local timezone of order
+ordered_at TIMESTAMP -- GMT
+"""
+
+SELECT SUM(total)
+FROM orders LEFT JOIN restaurant ON orders.restaurant_id = restaurant.id
+WHERE company_id = 1 AND DATE(ordered_at_local) = CURDATE()
+
+
+"""
+3. From the same 3 table schemas, find the total amount for orders placed
+yesterday, where "yesterday" refers to the previous day in Los Angeles
+(assume all restaurants are in LA).
+"""
+
+SELECT SUM(total)
+FROM orders 
+WHERE DATE(ordered_at_local) = CURDATE() - 1
+
