@@ -60,6 +60,33 @@ def generate_cubes_until(modulus):
 
     return result
 
+def minimum_x(x):
+    '''
+    Write a function decorator that takes an argument, and returns a decorator
+    that can be used to decorate a function, which verifies that the first
+    argument to a decorated function is at least the given value, raising a
+    ValueError on failure.
+    >>> @minimum_x(6)
+    ... def test(arg):
+    ...   print arg
+    ... 
+    >>> test(6)
+    6
+    >>> test(5) # raises ValueError
+    '''
+
+    def decorator(fun):
+        def wrapper(y):
+            if y >= x:
+                fun(y)
+            else:
+                raise ValueError
+        return wrapper
+    return decorator
+
+@minimum_x(6)
+def test(arg):
+    print(arg)
 
 def dummy():
     #pdb.set_trace()
